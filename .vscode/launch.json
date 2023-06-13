@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'nugetlon'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=nugetlon",
+                    "--package=nugetlon"
+                ],
+                "filter": {
+                    "name": "nugetlon",
+                    "kind": "bin"
+                }
+            },
+            "args": [".", "newtonsoft.json", "13.0.0", "update/newtonsoft"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'nugetlon'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=nugetlon",
+                    "--package=nugetlon"
+                ],
+                "filter": {
+                    "name": "nugetlon",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
