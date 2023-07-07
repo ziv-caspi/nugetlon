@@ -1,9 +1,9 @@
 use anyhow::{anyhow, Result};
-use std::{io::Write, path::PathBuf, process::Command};
+use std::{env::current_exe, io::Write, path::PathBuf, process::Command};
 
 pub fn pre_update(path: &PathBuf, base_branch: &str) -> Result<bool> {
     let parent = get_parent_path(path)?;
-    let out = Command::new("./pre-git-script.bat")
+    let out = Command::new(prefix_path("pre-git-script.bat")?)
         .env("FOUND_DIR", parent)
         .env("SRC_BRANCH", base_branch)
         .output()?;
@@ -22,7 +22,7 @@ pub fn post_update(
         package_name, package_version
     );
 
-    let out = Command::new("./post-git-script.bat")
+    let out = Command::new(prefix_path("post-git-script.bat")?)
         .env("FOUND_DIR", parent)
         .env("BRANCH_NAME", branch_name)
         .env("COMMIT_MSG", commit_msg)
@@ -50,31 +50,9 @@ fn get_parent_path(path: &PathBuf) -> Result<&str> {
     Ok(parent)
 }
 
-pub fn gen_script(
-    path: &PathBuf,
-    branch_name: &str,
-    package_name: &str,
-    package_version: &str,
-) -> Result<()> {
-    let mut anncesstors = path.ancestors();
-    anncesstors.next();
-    let parent = anncesstors
-        .next()
-        .ok_or(anyhow!("could not get parent dir for file path"))?
-        .to_str()
-        .ok_or(anyhow!("path is not valid unicde"))?;
-
-    let commit_msg = format!(
-        "updated {} nuget to version {}",
-        package_name, package_version
-    );
-    let script = format!(
-        "cd {} \n git checkout dev \n :: git pull origin dev \n git branch --force {} \n git checkout {} \n git add . \n git commit -m \"{}\" \n :: git push",
-        parent, branch_name, branch_name, commit_msg
-    );
-
-    let mut file = std::fs::File::create("./git-script.bat")?;
-    file.write_all(script.as_bytes())?;
-
-    Ok(())
+fn prefix_path(path: &str) -> Result<String> {
+    let current_exe = std::env::current_exe()?;
+    let parent = get_parent_path(&current_exe)?;
+    let prefixed = format!("{}\\{}", parent, path);
+    Ok(prefixed)
 }
