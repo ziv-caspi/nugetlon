@@ -15,6 +15,7 @@ pub struct CommandLineArgs {
     path: String,
     package_name: String,
     package_version: String,
+    source_branch_name: String,
     created_branch_name: String,
 }
 
@@ -22,7 +23,7 @@ fn main() {
     let result = get_command_line_args();
     if let Err(err) = result {
         println!(
-            "usage: nugetlon [PATH] [PACKAGE_NAME] [PACKAGE_VERSION] [BRANCH_NAME].\nERROR: {}",
+            "usage: nugetlon [PATH] [PACKAGE_NAME] [PACKAGE_VERSION] [SRC_BRANCH_NAME] [CREATED_BRANCH_NAME].\nERROR: {}",
             err
         );
         return;
@@ -46,16 +47,18 @@ fn main() {
 
 fn get_command_line_args() -> Result<CommandLineArgs> {
     let args: Vec<String> = env::args().collect();
-    ensure!(args.len() == 5, "user must specify all required params.");
+    ensure!(args.len() == 6, "user must specify all required params.");
     let path = (&args[1]).to_string();
     let package_name = (&args[2]).to_string();
     let package_version = (&args[3]).to_string();
-    let created_branch_name = (&args[4]).to_string();
+    let source_branch_name = (&args[4]).to_string();
+    let created_branch_name = (&args[5]).to_string();
 
     Ok(CommandLineArgs {
         path,
         created_branch_name,
         package_name,
+        source_branch_name,
         package_version,
     })
 }

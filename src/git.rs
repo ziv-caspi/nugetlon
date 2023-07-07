@@ -1,7 +1,16 @@
-use anyhow::{anyhow, ensure, Result};
+use anyhow::{anyhow, Result};
 use std::{io::Write, path::PathBuf, process::Command};
 
-pub fn commit_push(
+pub fn pre_update(path: &PathBuf, base_branch: &str) -> Result<bool> {
+    let parent = get_parent_path(path)?;
+    let out = Command::new("./pre-git-script.bat")
+        .env("FOUND_DIR", parent)
+        .env("SRC_BRANCH", base_branch)
+        .output()?;
+    Ok(out.status.success())
+}
+
+pub fn post_update(
     path: &PathBuf,
     package_name: &str,
     package_version: &str,
@@ -13,7 +22,7 @@ pub fn commit_push(
         package_name, package_version
     );
 
-    let out = Command::new("./git-script.bat")
+    let out = Command::new("./post-git-script.bat")
         .env("FOUND_DIR", parent)
         .env("BRANCH_NAME", branch_name)
         .env("COMMIT_MSG", commit_msg)

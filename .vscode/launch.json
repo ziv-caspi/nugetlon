@@ -19,7 +19,7 @@
                     "kind": "bin"
                 }
             },
-            "args": [".", "newtonsoft.json", "13.0.0", "update/newtonsoft"],
+            "args": [".", "newtonsoft.json", "13.0.0", "dev", "update/newtonsoft"],
             "cwd": "${workspaceFolder}"
         },
         {

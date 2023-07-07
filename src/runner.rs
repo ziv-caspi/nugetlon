@@ -19,13 +19,17 @@ pub fn run_all(paths: Vec<PathBuf>, args: &CommandLineArgs) -> Result<Vec<PathBu
 }
 
 fn run_for_project(path: &PathBuf, args: &CommandLineArgs) -> Result<bool> {
+    if !git::pre_update(path, &args.source_branch_name)? {
+        return Ok(false);
+    }
+
     let updated = updater::try_update_project(&path, &args)?;
     if !updated {
         return Ok(false);
     }
 
     println!("updated {:#?}, making git changes", &path);
-    let success = git::commit_push(
+    let success = git::post_update(
         &path,
         &args.package_name,
         &args.package_version,
