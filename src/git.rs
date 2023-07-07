@@ -7,8 +7,17 @@ pub fn commit_push(
     package_version: &str,
     branch_name: &str,
 ) -> Result<bool> {
-    gen_script(path, branch_name, package_name, package_version)?;
-    let out = Command::new("./git-script.bat").output()?;
+    let parent = get_parent_path(path)?;
+    let commit_msg = format!(
+        "updated {} nuget to version {}",
+        package_name, package_version
+    );
+
+    let out = Command::new("./git-script.bat")
+        .env("FOUND_DIR", parent)
+        .env("BRANCH_NAME", branch_name)
+        .env("COMMIT_MSG", commit_msg)
+        .output()?;
     match out.status.success() {
         true => {
             println!("created and pushed new branch with changes!");
@@ -19,6 +28,17 @@ pub fn commit_push(
             return Ok(false);
         }
     }
+}
+
+fn get_parent_path(path: &PathBuf) -> Result<&str> {
+    let mut anncesstors = path.ancestors();
+    anncesstors.next();
+    let parent = anncesstors
+        .next()
+        .ok_or(anyhow!("could not get parent dir for file path"))?
+        .to_str()
+        .ok_or(anyhow!("path is not valid unicde"))?;
+    Ok(parent)
 }
 
 pub fn gen_script(
