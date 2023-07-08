@@ -2,6 +2,7 @@ mod filesystem;
 mod git;
 mod runner;
 mod updater;
+mod xml;
 
 use anyhow::{ensure, Result};
 use std::{
