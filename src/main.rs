@@ -2,14 +2,10 @@ mod filesystem;
 mod git;
 mod runner;
 mod updater;
-mod xml;
+mod xml_updater;
 
 use anyhow::{ensure, Result};
-use std::{
-    env,
-    ffi::OsString,
-    path::{Path, PathBuf},
-};
+use std::{env, ffi::OsString, path::Path};
 
 #[derive(Debug)]
 pub struct CommandLineArgs {

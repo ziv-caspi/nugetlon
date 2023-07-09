@@ -7,7 +7,4 @@ edition = "2021"
 
 [dependencies]
 anyhow="1.0.71"
-xml="0.8.10"
-minidom="0.15.2"
-minidom_writer="1.0.0"
 xmltree={ version = "0.10.3", features = ["attribute-order"] }

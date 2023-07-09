@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use std::path::Path;
-use xml::EmitterConfig;
+use xmltree::EmitterConfig;
 
 pub fn xml_tree_update_project(
     project: &Path,

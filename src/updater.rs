@@ -1,9 +1,7 @@
-use anyhow::{anyhow, ensure, Ok, Result};
-use std::path::{Path, PathBuf};
-use std::process::Command;
-
-use crate::xml::xml_tree_update_project;
+use crate::xml_updater::xml_tree_update_project;
 use crate::CommandLineArgs;
+use anyhow::{Ok, Result};
+use std::path::PathBuf;
 
 pub fn try_update_project(project_path: &PathBuf, args: &CommandLineArgs) -> Result<bool> {
     let updated =

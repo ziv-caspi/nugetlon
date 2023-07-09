@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use std::{env::current_exe, io::Write, path::PathBuf, process::Command};
+use std::{path::PathBuf, process::Command};
 
 pub fn pre_update(path: &PathBuf, base_branch: &str) -> Result<bool> {
     let parent = get_parent_path(path)?;
